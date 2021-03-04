@@ -1,0 +1,55 @@
+--
+# This playbook runs a basic DF command.
+- hosts: virtuals
+#  remote_user: root
+  become: True
+  tasks:
+
+   - name: Gather the rpm package facts
+     package_facts:
+       manager: auto
+
+   - name: Print the rpm package facts
+     debug:
+       var: ansible_facts.packages
+
+   - name: Print all available facts
+     ansible.builtin.debug:
+#       var: ansible_facts
+       msg:
+         - "ansible facts : IP address {{ ansible_facts['default_ipv4']['address'] }}"
+#         - "ansible facts env : {{ ansible_facts['env'] }}"
+#  - name: Start service httpd, if not started
+#    service:
+#      name: httpd
+#      state: started
+#  - name: Populate service facts
+#    ansible.builtin.service_facts:
+#
+#  - name: Print service facts
+#    ansible.builtin.debug:
+#     var: ansible_facts.services
+   - name: check is mariaDB installed with CONDITION
+     yum:
+       name: mariadb-server
+       state: installed
+     when: ansible_default_ipv4.address == '192.168.2.122'
+   - name: check is apache installed with CONDITION
+     yum:
+       name: httpd
+       state: installed
+     when: ansible_default_ipv4.address == '192.168.2.122'
+#   - name: check is apache installed
+#     yum:
+#       name: httpd
+#       state: installed
+#   - name: remove apache
+#     yum:
+#       name: httpd
+#       state: removed
+
+#   - name: install/update apache to the latest version
+#     yum:
+#       name: httpd
+#       state: latest
+#     #become: True
