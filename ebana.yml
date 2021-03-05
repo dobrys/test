@@ -1,0 +1,10 @@
+---
+# This playbook runs a basic DF command.
+- hosts: virtuals
+#  remote_user: root
+  become: True
+  tasks:
+   - name: Print all available facts
+     ansible.builtin.debug:
+       msg:
+         - "ansible facts : IP address {{ ansible_facts['default_ipv4']['address'] }}"
